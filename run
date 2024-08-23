@@ -1,0 +1,4 @@
+#!/bin/bash 
+cd ..
+pygbag --bind 10.0.0.3 --port 8080 tetris/
+
