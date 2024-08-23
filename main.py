@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 import asyncio
 import sys
 
@@ -100,9 +101,10 @@ class tetris_blocks:
     # constructor
     def __init__(self, block_size, x, y, shape, color):
         self.block_size = block_size
-        self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
-        self.shape = shape
+        self.shape = random.choice(list(SHAPES.keys()))
         self.color = color
+        self.x = (GRID_WIDTH // 2 - 1) * block_size
+        self.y = 0
         self.rotation = 0
 
     def rotate(self):
@@ -130,11 +132,13 @@ def draw_grid() -> None:
             rect = pg.Rect(x, y, BLOCK_SIZE, BLOCK_SIZE)
             pg.draw.rect(screen, (60, 60, 59), rect, 1)
 
-def draw_info(score: int, level: int) -> None:
-    score_text = FONT.render(f"Score: {score}", True, (255, 255, 255))
-    level_text = FONT.render(f"Level: {level}", True, (255, 255, 255))
+def draw_info(score: int, level: int, lines: int) -> None:
+    score_text = FONT.render(f"SCORE: {score}", True, (255, 255, 255))
+    level_text = FONT.render(f"LEVEL: {level}", True, (255, 255, 255))
+    lines_text = FONT.render(f"LINES: {lines}", True, (255, 255, 255))
     screen.blit(score_text, (GRID_WIDTH * BLOCK_SIZE + 20, 20))
     screen.blit(level_text, (GRID_WIDTH * BLOCK_SIZE + 20, 60))
+    screen.blit(lines_text, (GRID_WIDTH * BLOCK_SIZE + 20, 100))
 
 def line_cleared(lines_cleared: str,level: int) -> int :
     points_dictionary = {
@@ -155,10 +159,10 @@ async def main() -> None:
 
         screen.fill((0, 0, 0))  # Clear the screen
         draw_grid()  # Draw the grid
-        draw_info(score=0, level=0)  # Draw the scoring and level info
+        draw_info(score=0, level=0, lines=0)  # Draw the scoring and level info at 0
 
         pg.display.update()
         await asyncio.sleep(0)
 
-        # Run the main function
-        asyncio.run(main())
+# Run the main function
+asyncio.run(main())
